@@ -8,7 +8,8 @@ from app.api.v1 import (
     db_routes,
     collection_routes,
     document_routes,
-    query_routes
+    query_routes,
+    sql_routes
 )
 
 app = FastAPI(
@@ -66,6 +67,13 @@ app.include_router(
     query_routes.router, 
     prefix="/query", 
     tags=["Queries"]
+)
+
+# Interfaz SQL-like abstracta
+app.include_router(
+    sql_routes.router, 
+    prefix="/sql", 
+    tags=["SQL Interface"]
 )
 
 # =================================================

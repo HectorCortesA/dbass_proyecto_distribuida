@@ -23,3 +23,12 @@ class JoinQuerySchema(BaseModel):
     local_field: str
     foreign_field: str
     as_name: str
+
+class CountQuerySchema(BaseModel):
+    db_name: str
+    collection_name: str
+
+class AvgQuerySchema(BaseModel):
+    db_name: str
+    collection_name: str
+    field: str
