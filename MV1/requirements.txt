@@ -3,3 +3,4 @@ grpcio-tools
 pymongo
 pika
 python-dotenv
+pydantic

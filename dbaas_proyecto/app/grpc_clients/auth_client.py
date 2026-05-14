@@ -7,7 +7,8 @@ class AuthClient:
     def __init__(self):
         # Lee la IP y el puerto de la MV3 desde las variables de entorno. 
         # Si no existe, usa "mv3_auth:50051" por defecto (nombre del contenedor en Docker).
-        host = os.getenv("AUTH_GRPC_HOST", "mv3_auth:50051")
+        # Tiene que tener guion medio (-) aquí también
+        host = os.getenv("AUTH_GRPC_HOST", "mv3-auth:50051")
         
         # Abre el canal de comunicación gRPC
         self.channel = grpc.insecure_channel(host)

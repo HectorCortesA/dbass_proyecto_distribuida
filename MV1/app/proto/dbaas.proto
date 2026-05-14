@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package dbaas;
+
+// Servicio de Autenticación (MV3)
+service AuthService {
+  rpc Register(RegisterRequest) returns (AuthResponse);
+  rpc Login(LoginRequest) returns (AuthResponse);
+}
+
+// Servicio de Base de Datos y CRUD (MV1)
+service DatabaseService {
+  rpc CreateDatabase(CreateDbRequest) returns (DbResponse);
+}
+
+// Servicio de Consultas y MPI (MV2)
+service QueryService {
+  rpc AggregateSum(QueryRequest) returns (QueryResponse);
+}
+
+// Mensajes para Auth
+message RegisterRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  string role = 4;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string message = 1;
+  string access_token = 2;
+  string error = 3;
+}
+
+// Mensajes para DB
+message CreateDbRequest {
+  string user_id = 1;
+  string db_name = 2;
+}
+
+message DbResponse {
+  string message = 1;
+  string error = 2;
+}
+
+// Mensajes para Queries
+message QueryRequest {
+  string user_id = 1;
+  string db_name = 2;
+  string table_name = 3;
+  string field = 4;
+}
+
+message QueryResponse {
+  string result = 1;
+  string error = 2;
+}

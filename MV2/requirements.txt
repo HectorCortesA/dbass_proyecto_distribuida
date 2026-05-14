@@ -3,3 +3,4 @@ grpcio-tools
 pymongo
 mpi4py
 python-dotenv
+pydantic

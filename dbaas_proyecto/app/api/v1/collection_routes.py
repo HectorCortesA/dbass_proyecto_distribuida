@@ -1,45 +1,20 @@
-# app/api/v1/collection_routes.py
-from fastapi import APIRouter, HTTPException, Depends  # <--- ASEGÚRATE DE QUE ESTÉ AQUÍ
-from app.schemas.collection_schema import CreateCollectionSchema
+from fastapi import APIRouter, Depends, HTTPException
+from app.middleware.jwt_middleware import get_current_user
+from app.schemas.collection_schema import CreateCollectionSchema, DeleteCollectionSchema
 from app.grpc_clients.db_client import DbClient
 
-router = APIRouter(prefix="/collections", tags=["Collections"])
+router = APIRouter(prefix="/collection", tags=["Collections"])
 db_grpc = DbClient()
 
-# ... resto de tus rutas
-#
-
-# Crear colección
 @router.post("/create")
-def create_new_collection(
-    data: CreateCollectionSchema,
-    current_user: dict = Depends(get_current_user)
-):
-    return create_collection(
-        db_name=data.db_name,
-        collection_name=data.collection_name,
-        owner_id=current_user["id"]
-    )
+def create_new_collection(data: CreateCollectionSchema, current_user: dict = Depends(get_current_user)):
+    # Aquí irá la llamada a gRPC cuando agregues la función a tu archivo .proto
+    return {"message": f"Endpoint preparado para crear colección {data.collection_name}"}
 
-# Listar colecciones
 @router.get("/list")
-def get_collections(
-    db_name: str,
-    current_user: dict = Depends(get_current_user)
-):
-    return list_collections(
-        db_name=db_name,
-        owner_id=current_user["id"]
-    )
+def get_collections(db_name: str, current_user: dict = Depends(get_current_user)):
+    return {"message": "Endpoint preparado para listar colecciones"}
 
-# Eliminar colección
 @router.delete("/delete")
-def remove_collection(
-    data: DeleteCollectionSchema,
-    current_user: dict = Depends(get_current_user)
-):
-    return delete_collection(
-        db_name=data.db_name,
-        collection_name=data.collection_name,
-        owner_id=current_user["id"]
-    )
+def remove_collection(data: DeleteCollectionSchema, current_user: dict = Depends(get_current_user)):
+    return {"message": "Endpoint preparado para eliminar colección"}
