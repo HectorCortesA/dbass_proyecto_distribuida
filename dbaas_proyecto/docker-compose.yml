@@ -1,31 +1,25 @@
 services:
-  backend:
+  gateway:
     build: .
-
-    container_name: fastapi_backend
-
+    container_name: dbaas_gateway
     ports:
       - "8000:8000"
-
-    volumes:
-      - .:/app
-
-    depends_on:
-      - mongo
-
     env_file:
       - .env
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: dbaas_rabbitmq
+    ports:
+      - "5672:5672" # Puerto de datos para Pika
+      - "15672:15672" # Panel de control web
+    networks:
+      - default
 
   mongo:
     image: mongo:latest
-
-    container_name: mongodb
-
+    container_name: mongodb_core
     ports:
       - "27017:27017"
-
-    volumes:
-      - mongo_data:/data/db
-
-volumes:
-  mongo_data:
