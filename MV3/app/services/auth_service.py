@@ -1,9 +1,5 @@
 from app.database.connection import users_collection
-from app.auth.security import (
-    get_password_hash,  # Usando el nombre común en tu proyecto anterior
-    verify_password,
-    create_access_token
-)
+from app.auth.security import hash_password, verify_password, create_access_token # Cambiado get_password_hash por hash_password
 from app.auth.schemas import UserRegister, UserLogin
 
 def register_user(user_data: UserRegister):
@@ -26,13 +22,12 @@ def register_user(user_data: UserRegister):
     new_user = {
         "username": user_data.username,
         "email": user_data.email,
-        "password": get_password_hash(user_data.password),
-        "role": user_data.role if user_data.role else "usuario" # Rol por defecto
+        "password": hash_password(user_data.password), # Corregido aquí
+        "role": user_data.role if user_data.role else "usuario"
     }
 
     # 4. Insertar en MongoDB
     users_collection.insert_one(new_user)
-
     return {"message": "Usuario registrado exitosamente"}
 
 

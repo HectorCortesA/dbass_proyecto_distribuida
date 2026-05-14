@@ -2,40 +2,26 @@ syntax = "proto3";
 
 package dbaas;
 
-// =============================================
-// SERVICIO DE AUTENTICACIÓN (MV3) - puerto 50051
-// =============================================
 service AuthService {
   rpc Register(RegisterRequest) returns (AuthResponse);
   rpc Login(LoginRequest) returns (AuthResponse);
   rpc GetAllUsers(EmptyRequest) returns (UsersResponse);
 }
 
-// =============================================
-// SERVICIO DE BASE DE DATOS Y CRUD (MV1) - puerto 50052
-// =============================================
 service DatabaseService {
-  // Bases de datos
   rpc CreateDatabase(CreateDbRequest) returns (DbResponse);
   rpc ListDatabases(UserRequest) returns (ListDbResponse);
   rpc DeleteDatabase(DeleteDbRequest) returns (DbResponse);
   rpc AssignAccess(AssignAccessRequest) returns (DbResponse);
-
-  // Colecciones
   rpc CreateCollection(CollectionRequest) returns (DbResponse);
   rpc ListCollections(CollectionListRequest) returns (CollectionListResponse);
   rpc DeleteCollection(CollectionRequest) returns (DbResponse);
-
-  // Documentos
   rpc InsertDocument(InsertDocRequest) returns (DocResponse);
   rpc FindDocuments(FindDocRequest) returns (DocsResponse);
   rpc UpdateDocument(UpdateDocRequest) returns (DocResponse);
   rpc DeleteDocument(DeleteDocRequest) returns (DocResponse);
 }
 
-// =============================================
-// SERVICIO DE CONSULTAS Y MPI (MV2) - puerto 50053
-// =============================================
 service QueryService {
   rpc AggregateSum(QueryRequest) returns (QueryResponse);
   rpc FilterDocuments(FilterRequest) returns (QueryResponse);
@@ -44,174 +30,30 @@ service QueryService {
   rpc InnerJoin(JoinRequest) returns (QueryResponse);
 }
 
-// =============================================
-// MENSAJES COMPARTIDOS
-// =============================================
+// Mensajes (Asegúrate de que todos estos existan)
 message EmptyRequest {}
-
-message UserRequest {
-  string user_id = 1;
-}
-
-// =============================================
-// MENSAJES AUTH
-// =============================================
-message RegisterRequest {
-  string username = 1;
-  string email = 2;
-  string password = 3;
-  string role = 4;
-}
-
-message LoginRequest {
-  string email = 1;
-  string password = 2;
-}
-
-message AuthResponse {
-  string message = 1;
-  string access_token = 2;
-  string error = 3;
-}
-
-message UserInfo {
-  string username = 1;
-  string email = 2;
-}
-
-message UsersResponse {
-  repeated UserInfo users = 1;
-  string error = 2;
-}
-
-// =============================================
-// MENSAJES DATABASE
-// =============================================
-message CreateDbRequest {
-  string user_id = 1;
-  string db_name = 2;
-}
-
-message DeleteDbRequest {
-  string user_id = 1;
-  string db_name = 2;
-}
-
-message AssignAccessRequest {
-  string db_name = 1;
-  string target_email = 2;
-  string role = 3;
-  string current_user_id = 4;
-}
-
-message DbResponse {
-  string message = 1;
-  string error = 2;
-}
-
-message ListDbResponse {
-  repeated string databases = 1;
-  string error = 2;
-}
-
-// =============================================
-// MENSAJES COLLECTIONS
-// =============================================
-message CollectionRequest {
-  string user_id = 1;
-  string db_name = 2;
-  string collection_name = 3;
-}
-
-message CollectionListRequest {
-  string user_id = 1;
-  string db_name = 2;
-}
-
-message CollectionListResponse {
-  repeated string collections = 1;
-  string error = 2;
-}
-
-// =============================================
-// MENSAJES DOCUMENTS
-// =============================================
-message InsertDocRequest {
-  string db_name = 1;
-  string collection_name = 2;
-  string document_json = 3;
-  string owner_id = 4;
-}
-
-message FindDocRequest {
-  string db_name = 1;
-  string collection_name = 2;
-  string owner_id = 3;
-}
-
-message UpdateDocRequest {
-  string db_name = 1;
-  string collection_name = 2;
-  string filter_json = 3;
-  string new_data_json = 4;
-  string owner_id = 5;
-}
-
-message DeleteDocRequest {
-  string db_name = 1;
-  string collection_name = 2;
-  string filter_json = 3;
-  string owner_id = 4;
-}
-
-message DocResponse {
-  string message = 1;
-  string id = 2;
-  string modified_count = 3;
-  string deleted_count = 4;
-  string error = 5;
-}
-
-message DocsResponse {
-  string data_json = 1;
-  string error = 2;
-}
-
-// =============================================
-// MENSAJES QUERIES
-// =============================================
-message QueryRequest {
-  string user_id = 1;
-  string db_name = 2;
-  string table_name = 3;
-  string field = 4;
-}
-
-message FilterRequest {
-  string db_name = 1;
-  string collection_name = 2;
-  string filters_json = 3;
-  string owner_id = 4;
-}
-
-message AggregateRequest {
-  string db_name = 1;
-  string collection_name = 2;
-  string pipeline_json = 3;
-  string owner_id = 4;
-}
-
-message JoinRequest {
-  string user_id = 1;
-  string db_name = 2;
-  string table_name = 3;
-  string from_table = 4;
-  string local_field = 5;
-  string foreign_field = 6;
-  string as_name = 7;
-}
-
-message QueryResponse {
-  string result = 1;
-  string error = 2;
-}
+message UserRequest { string user_id = 1; }
+message RegisterRequest { string username = 1; string email = 2; string password = 3; string role = 4; }
+message LoginRequest { string email = 1; string password = 2; }
+message AuthResponse { string message = 1; string access_token = 2; string error = 3; }
+message UserInfo { string username = 1; string email = 2; }
+message UsersResponse { repeated UserInfo users = 1; string error = 2; }
+message CreateDbRequest { string user_id = 1; string db_name = 2; }
+message DeleteDbRequest { string user_id = 1; string db_name = 2; }
+message AssignAccessRequest { string db_name = 1; string target_email = 2; string role = 3; string current_user_id = 4; }
+message DbResponse { string message = 1; string error = 2; }
+message ListDbResponse { repeated string databases = 1; string error = 2; }
+message CollectionRequest { string user_id = 1; string db_name = 2; string collection_name = 3; }
+message CollectionListRequest { string user_id = 1; string db_name = 2; }
+message CollectionListResponse { repeated string collections = 1; string error = 2; }
+message InsertDocRequest { string db_name = 1; string collection_name = 2; string document_json = 3; string owner_id = 4; }
+message FindDocRequest { string db_name = 1; string collection_name = 2; string owner_id = 3; }
+message UpdateDocRequest { string db_name = 1; string collection_name = 2; string filter_json = 3; string new_data_json = 4; string owner_id = 5; }
+message DeleteDocRequest { string db_name = 1; string collection_name = 2; string filter_json = 3; string owner_id = 4; }
+message DocResponse { string message = 1; string id = 2; string modified_count = 3; string deleted_count = 4; string error = 5; }
+message DocsResponse { string data_json = 1; string error = 2; }
+message QueryRequest { string user_id = 1; string db_name = 2; string table_name = 3; string field = 4; }
+message FilterRequest { string db_name = 1; string collection_name = 2; string filters_json = 3; string owner_id = 4; }
+message AggregateRequest { string db_name = 1; string collection_name = 2; string pipeline_json = 3; string owner_id = 4; }
+message JoinRequest { string user_id = 1; string db_name = 2; string table_name = 3; string from_table = 4; string local_field = 5; string foreign_field = 6; string as_name = 7; }
+message QueryResponse { string result = 1; string error = 2; }

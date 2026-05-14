@@ -105,11 +105,12 @@ class DatabaseServiceServicer(pb2_grpc.DatabaseServiceServicer):
     def InsertDocument(self, request, context):
         try:
             document = json.loads(request.document_json)
+        # Asegúrate de que el parámetro sea owner_id como en document_service.py
             result = insert_document(
                 db_name=request.db_name,
                 collection_name=request.collection_name,
                 document=document,
-                owner_id=request.owner_id,
+                owner_id=request.owner_id, 
             )
             return pb2.DocResponse(message=result["message"], id=result.get("id", ""))
         except Exception as e:
