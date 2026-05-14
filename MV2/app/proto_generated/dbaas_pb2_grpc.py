@@ -26,7 +26,9 @@ if _version_not_supported:
 
 
 class AuthServiceStub(object):
-    """Servicio de Autenticación (MV3)
+    """=============================================
+    SERVICIO DE AUTENTICACIÓN (MV3) - puerto 50051
+    =============================================
     """
 
     def __init__(self, channel):
@@ -45,10 +47,17 @@ class AuthServiceStub(object):
                 request_serializer=dbaas__pb2.LoginRequest.SerializeToString,
                 response_deserializer=dbaas__pb2.AuthResponse.FromString,
                 _registered_method=True)
+        self.GetAllUsers = channel.unary_unary(
+                '/dbaas.AuthService/GetAllUsers',
+                request_serializer=dbaas__pb2.EmptyRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.UsersResponse.FromString,
+                _registered_method=True)
 
 
 class AuthServiceServicer(object):
-    """Servicio de Autenticación (MV3)
+    """=============================================
+    SERVICIO DE AUTENTICACIÓN (MV3) - puerto 50051
+    =============================================
     """
 
     def Register(self, request, context):
@@ -58,6 +67,12 @@ class AuthServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Login(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetAllUsers(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -76,6 +91,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     request_deserializer=dbaas__pb2.LoginRequest.FromString,
                     response_serializer=dbaas__pb2.AuthResponse.SerializeToString,
             ),
+            'GetAllUsers': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllUsers,
+                    request_deserializer=dbaas__pb2.EmptyRequest.FromString,
+                    response_serializer=dbaas__pb2.UsersResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'dbaas.AuthService', rpc_method_handlers)
@@ -85,7 +105,9 @@ def add_AuthServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class AuthService(object):
-    """Servicio de Autenticación (MV3)
+    """=============================================
+    SERVICIO DE AUTENTICACIÓN (MV3) - puerto 50051
+    =============================================
     """
 
     @staticmethod
@@ -142,9 +164,38 @@ class AuthService(object):
             metadata,
             _registered_method=True)
 
+    @staticmethod
+    def GetAllUsers(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.AuthService/GetAllUsers',
+            dbaas__pb2.EmptyRequest.SerializeToString,
+            dbaas__pb2.UsersResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
 
 class DatabaseServiceStub(object):
-    """Servicio de Base de Datos y CRUD (MV1)
+    """=============================================
+    SERVICIO DE BASE DE DATOS Y CRUD (MV1) - puerto 50052
+    =============================================
     """
 
     def __init__(self, channel):
@@ -158,13 +209,128 @@ class DatabaseServiceStub(object):
                 request_serializer=dbaas__pb2.CreateDbRequest.SerializeToString,
                 response_deserializer=dbaas__pb2.DbResponse.FromString,
                 _registered_method=True)
+        self.ListDatabases = channel.unary_unary(
+                '/dbaas.DatabaseService/ListDatabases',
+                request_serializer=dbaas__pb2.UserRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.ListDbResponse.FromString,
+                _registered_method=True)
+        self.DeleteDatabase = channel.unary_unary(
+                '/dbaas.DatabaseService/DeleteDatabase',
+                request_serializer=dbaas__pb2.DeleteDbRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DbResponse.FromString,
+                _registered_method=True)
+        self.AssignAccess = channel.unary_unary(
+                '/dbaas.DatabaseService/AssignAccess',
+                request_serializer=dbaas__pb2.AssignAccessRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DbResponse.FromString,
+                _registered_method=True)
+        self.CreateCollection = channel.unary_unary(
+                '/dbaas.DatabaseService/CreateCollection',
+                request_serializer=dbaas__pb2.CollectionRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DbResponse.FromString,
+                _registered_method=True)
+        self.ListCollections = channel.unary_unary(
+                '/dbaas.DatabaseService/ListCollections',
+                request_serializer=dbaas__pb2.CollectionListRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.CollectionListResponse.FromString,
+                _registered_method=True)
+        self.DeleteCollection = channel.unary_unary(
+                '/dbaas.DatabaseService/DeleteCollection',
+                request_serializer=dbaas__pb2.CollectionRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DbResponse.FromString,
+                _registered_method=True)
+        self.InsertDocument = channel.unary_unary(
+                '/dbaas.DatabaseService/InsertDocument',
+                request_serializer=dbaas__pb2.InsertDocRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DocResponse.FromString,
+                _registered_method=True)
+        self.FindDocuments = channel.unary_unary(
+                '/dbaas.DatabaseService/FindDocuments',
+                request_serializer=dbaas__pb2.FindDocRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DocsResponse.FromString,
+                _registered_method=True)
+        self.UpdateDocument = channel.unary_unary(
+                '/dbaas.DatabaseService/UpdateDocument',
+                request_serializer=dbaas__pb2.UpdateDocRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DocResponse.FromString,
+                _registered_method=True)
+        self.DeleteDocument = channel.unary_unary(
+                '/dbaas.DatabaseService/DeleteDocument',
+                request_serializer=dbaas__pb2.DeleteDocRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.DocResponse.FromString,
+                _registered_method=True)
 
 
 class DatabaseServiceServicer(object):
-    """Servicio de Base de Datos y CRUD (MV1)
+    """=============================================
+    SERVICIO DE BASE DE DATOS Y CRUD (MV1) - puerto 50052
+    =============================================
     """
 
     def CreateDatabase(self, request, context):
+        """Bases de datos
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListDatabases(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteDatabase(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AssignAccess(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CreateCollection(self, request, context):
+        """Colecciones
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListCollections(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteCollection(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def InsertDocument(self, request, context):
+        """Documentos
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def FindDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdateDocument(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteDocument(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -178,6 +344,56 @@ def add_DatabaseServiceServicer_to_server(servicer, server):
                     request_deserializer=dbaas__pb2.CreateDbRequest.FromString,
                     response_serializer=dbaas__pb2.DbResponse.SerializeToString,
             ),
+            'ListDatabases': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListDatabases,
+                    request_deserializer=dbaas__pb2.UserRequest.FromString,
+                    response_serializer=dbaas__pb2.ListDbResponse.SerializeToString,
+            ),
+            'DeleteDatabase': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteDatabase,
+                    request_deserializer=dbaas__pb2.DeleteDbRequest.FromString,
+                    response_serializer=dbaas__pb2.DbResponse.SerializeToString,
+            ),
+            'AssignAccess': grpc.unary_unary_rpc_method_handler(
+                    servicer.AssignAccess,
+                    request_deserializer=dbaas__pb2.AssignAccessRequest.FromString,
+                    response_serializer=dbaas__pb2.DbResponse.SerializeToString,
+            ),
+            'CreateCollection': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateCollection,
+                    request_deserializer=dbaas__pb2.CollectionRequest.FromString,
+                    response_serializer=dbaas__pb2.DbResponse.SerializeToString,
+            ),
+            'ListCollections': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListCollections,
+                    request_deserializer=dbaas__pb2.CollectionListRequest.FromString,
+                    response_serializer=dbaas__pb2.CollectionListResponse.SerializeToString,
+            ),
+            'DeleteCollection': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteCollection,
+                    request_deserializer=dbaas__pb2.CollectionRequest.FromString,
+                    response_serializer=dbaas__pb2.DbResponse.SerializeToString,
+            ),
+            'InsertDocument': grpc.unary_unary_rpc_method_handler(
+                    servicer.InsertDocument,
+                    request_deserializer=dbaas__pb2.InsertDocRequest.FromString,
+                    response_serializer=dbaas__pb2.DocResponse.SerializeToString,
+            ),
+            'FindDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.FindDocuments,
+                    request_deserializer=dbaas__pb2.FindDocRequest.FromString,
+                    response_serializer=dbaas__pb2.DocsResponse.SerializeToString,
+            ),
+            'UpdateDocument': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateDocument,
+                    request_deserializer=dbaas__pb2.UpdateDocRequest.FromString,
+                    response_serializer=dbaas__pb2.DocResponse.SerializeToString,
+            ),
+            'DeleteDocument': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteDocument,
+                    request_deserializer=dbaas__pb2.DeleteDocRequest.FromString,
+                    response_serializer=dbaas__pb2.DocResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'dbaas.DatabaseService', rpc_method_handlers)
@@ -187,7 +403,9 @@ def add_DatabaseServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class DatabaseService(object):
-    """Servicio de Base de Datos y CRUD (MV1)
+    """=============================================
+    SERVICIO DE BASE DE DATOS Y CRUD (MV1) - puerto 50052
+    =============================================
     """
 
     @staticmethod
@@ -217,9 +435,281 @@ class DatabaseService(object):
             metadata,
             _registered_method=True)
 
+    @staticmethod
+    def ListDatabases(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/ListDatabases',
+            dbaas__pb2.UserRequest.SerializeToString,
+            dbaas__pb2.ListDbResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteDatabase(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/DeleteDatabase',
+            dbaas__pb2.DeleteDbRequest.SerializeToString,
+            dbaas__pb2.DbResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AssignAccess(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/AssignAccess',
+            dbaas__pb2.AssignAccessRequest.SerializeToString,
+            dbaas__pb2.DbResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CreateCollection(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/CreateCollection',
+            dbaas__pb2.CollectionRequest.SerializeToString,
+            dbaas__pb2.DbResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListCollections(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/ListCollections',
+            dbaas__pb2.CollectionListRequest.SerializeToString,
+            dbaas__pb2.CollectionListResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteCollection(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/DeleteCollection',
+            dbaas__pb2.CollectionRequest.SerializeToString,
+            dbaas__pb2.DbResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def InsertDocument(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/InsertDocument',
+            dbaas__pb2.InsertDocRequest.SerializeToString,
+            dbaas__pb2.DocResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def FindDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/FindDocuments',
+            dbaas__pb2.FindDocRequest.SerializeToString,
+            dbaas__pb2.DocsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def UpdateDocument(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/UpdateDocument',
+            dbaas__pb2.UpdateDocRequest.SerializeToString,
+            dbaas__pb2.DocResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteDocument(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.DatabaseService/DeleteDocument',
+            dbaas__pb2.DeleteDocRequest.SerializeToString,
+            dbaas__pb2.DocResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
 
 class QueryServiceStub(object):
-    """Servicio de Consultas y MPI (MV2)
+    """=============================================
+    SERVICIO DE CONSULTAS Y MPI (MV2) - puerto 50053
+    =============================================
     """
 
     def __init__(self, channel):
@@ -233,13 +723,59 @@ class QueryServiceStub(object):
                 request_serializer=dbaas__pb2.QueryRequest.SerializeToString,
                 response_deserializer=dbaas__pb2.QueryResponse.FromString,
                 _registered_method=True)
+        self.FilterDocuments = channel.unary_unary(
+                '/dbaas.QueryService/FilterDocuments',
+                request_serializer=dbaas__pb2.FilterRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.QueryResponse.FromString,
+                _registered_method=True)
+        self.AggregateDocuments = channel.unary_unary(
+                '/dbaas.QueryService/AggregateDocuments',
+                request_serializer=dbaas__pb2.AggregateRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.QueryResponse.FromString,
+                _registered_method=True)
+        self.DistinctValues = channel.unary_unary(
+                '/dbaas.QueryService/DistinctValues',
+                request_serializer=dbaas__pb2.QueryRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.QueryResponse.FromString,
+                _registered_method=True)
+        self.InnerJoin = channel.unary_unary(
+                '/dbaas.QueryService/InnerJoin',
+                request_serializer=dbaas__pb2.JoinRequest.SerializeToString,
+                response_deserializer=dbaas__pb2.QueryResponse.FromString,
+                _registered_method=True)
 
 
 class QueryServiceServicer(object):
-    """Servicio de Consultas y MPI (MV2)
+    """=============================================
+    SERVICIO DE CONSULTAS Y MPI (MV2) - puerto 50053
+    =============================================
     """
 
     def AggregateSum(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def FilterDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AggregateDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DistinctValues(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def InnerJoin(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -253,6 +789,26 @@ def add_QueryServiceServicer_to_server(servicer, server):
                     request_deserializer=dbaas__pb2.QueryRequest.FromString,
                     response_serializer=dbaas__pb2.QueryResponse.SerializeToString,
             ),
+            'FilterDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.FilterDocuments,
+                    request_deserializer=dbaas__pb2.FilterRequest.FromString,
+                    response_serializer=dbaas__pb2.QueryResponse.SerializeToString,
+            ),
+            'AggregateDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.AggregateDocuments,
+                    request_deserializer=dbaas__pb2.AggregateRequest.FromString,
+                    response_serializer=dbaas__pb2.QueryResponse.SerializeToString,
+            ),
+            'DistinctValues': grpc.unary_unary_rpc_method_handler(
+                    servicer.DistinctValues,
+                    request_deserializer=dbaas__pb2.QueryRequest.FromString,
+                    response_serializer=dbaas__pb2.QueryResponse.SerializeToString,
+            ),
+            'InnerJoin': grpc.unary_unary_rpc_method_handler(
+                    servicer.InnerJoin,
+                    request_deserializer=dbaas__pb2.JoinRequest.FromString,
+                    response_serializer=dbaas__pb2.QueryResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'dbaas.QueryService', rpc_method_handlers)
@@ -262,7 +818,9 @@ def add_QueryServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class QueryService(object):
-    """Servicio de Consultas y MPI (MV2)
+    """=============================================
+    SERVICIO DE CONSULTAS Y MPI (MV2) - puerto 50053
+    =============================================
     """
 
     @staticmethod
@@ -281,6 +839,114 @@ class QueryService(object):
             target,
             '/dbaas.QueryService/AggregateSum',
             dbaas__pb2.QueryRequest.SerializeToString,
+            dbaas__pb2.QueryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def FilterDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.QueryService/FilterDocuments',
+            dbaas__pb2.FilterRequest.SerializeToString,
+            dbaas__pb2.QueryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AggregateDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.QueryService/AggregateDocuments',
+            dbaas__pb2.AggregateRequest.SerializeToString,
+            dbaas__pb2.QueryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DistinctValues(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.QueryService/DistinctValues',
+            dbaas__pb2.QueryRequest.SerializeToString,
+            dbaas__pb2.QueryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def InnerJoin(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/dbaas.QueryService/InnerJoin',
+            dbaas__pb2.JoinRequest.SerializeToString,
             dbaas__pb2.QueryResponse.FromString,
             options,
             channel_credentials,

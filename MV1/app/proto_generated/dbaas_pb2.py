@@ -24,31 +24,69 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x64\x62\x61\x61s.proto\x12\x05\x64\x62\x61\x61s\"R\n\x0fRegisterRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x0c\n\x04role\x18\x04 \x01(\t\"/\n\x0cLoginRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"D\n\x0c\x41uthResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x12\r\n\x05\x65rror\x18\x03 \x01(\t\"3\n\x0f\x43reateDbRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\",\n\nDbResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"S\n\x0cQueryRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\x12\x12\n\ntable_name\x18\x03 \x01(\t\x12\r\n\x05\x66ield\x18\x04 \x01(\t\".\n\rQueryResponse\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t2y\n\x0b\x41uthService\x12\x37\n\x08Register\x12\x16.dbaas.RegisterRequest\x1a\x13.dbaas.AuthResponse\x12\x31\n\x05Login\x12\x13.dbaas.LoginRequest\x1a\x13.dbaas.AuthResponse2N\n\x0f\x44\x61tabaseService\x12;\n\x0e\x43reateDatabase\x12\x16.dbaas.CreateDbRequest\x1a\x11.dbaas.DbResponse2I\n\x0cQueryService\x12\x39\n\x0c\x41ggregateSum\x12\x13.dbaas.QueryRequest\x1a\x14.dbaas.QueryResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x64\x62\x61\x61s.proto\x12\x05\x64\x62\x61\x61s\"\x0e\n\x0c\x45mptyRequest\"\x1e\n\x0bUserRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\"R\n\x0fRegisterRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x0c\n\x04role\x18\x04 \x01(\t\"/\n\x0cLoginRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"D\n\x0c\x41uthResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x12\r\n\x05\x65rror\x18\x03 \x01(\t\"+\n\x08UserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\">\n\rUsersResponse\x12\x1e\n\x05users\x18\x01 \x03(\x0b\x32\x0f.dbaas.UserInfo\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"3\n\x0f\x43reateDbRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\"3\n\x0f\x44\x65leteDbRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\"c\n\x13\x41ssignAccessRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x14\n\x0ctarget_email\x18\x02 \x01(\t\x12\x0c\n\x04role\x18\x03 \x01(\t\x12\x17\n\x0f\x63urrent_user_id\x18\x04 \x01(\t\",\n\nDbResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"2\n\x0eListDbResponse\x12\x11\n\tdatabases\x18\x01 \x03(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"N\n\x11\x43ollectionRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x03 \x01(\t\"9\n\x15\x43ollectionListRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\"<\n\x16\x43ollectionListResponse\x12\x13\n\x0b\x63ollections\x18\x01 \x03(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"e\n\x10InsertDocRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x02 \x01(\t\x12\x15\n\rdocument_json\x18\x03 \x01(\t\x12\x10\n\x08owner_id\x18\x04 \x01(\t\"L\n\x0e\x46indDocRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x02 \x01(\t\x12\x10\n\x08owner_id\x18\x03 \x01(\t\"z\n\x10UpdateDocRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x02 \x01(\t\x12\x13\n\x0b\x66ilter_json\x18\x03 \x01(\t\x12\x15\n\rnew_data_json\x18\x04 \x01(\t\x12\x10\n\x08owner_id\x18\x05 \x01(\t\"c\n\x10\x44\x65leteDocRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x02 \x01(\t\x12\x13\n\x0b\x66ilter_json\x18\x03 \x01(\t\x12\x10\n\x08owner_id\x18\x04 \x01(\t\"h\n\x0b\x44ocResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\t\x12\x16\n\x0emodified_count\x18\x03 \x01(\t\x12\x15\n\rdeleted_count\x18\x04 \x01(\t\x12\r\n\x05\x65rror\x18\x05 \x01(\t\"0\n\x0c\x44ocsResponse\x12\x11\n\tdata_json\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"S\n\x0cQueryRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\x12\x12\n\ntable_name\x18\x03 \x01(\t\x12\r\n\x05\x66ield\x18\x04 \x01(\t\"a\n\rFilterRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x02 \x01(\t\x12\x14\n\x0c\x66ilters_json\x18\x03 \x01(\t\x12\x10\n\x08owner_id\x18\x04 \x01(\t\"e\n\x10\x41ggregateRequest\x12\x0f\n\x07\x64\x62_name\x18\x01 \x01(\t\x12\x17\n\x0f\x63ollection_name\x18\x02 \x01(\t\x12\x15\n\rpipeline_json\x18\x03 \x01(\t\x12\x10\n\x08owner_id\x18\x04 \x01(\t\"\x94\x01\n\x0bJoinRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x62_name\x18\x02 \x01(\t\x12\x12\n\ntable_name\x18\x03 \x01(\t\x12\x12\n\nfrom_table\x18\x04 \x01(\t\x12\x13\n\x0blocal_field\x18\x05 \x01(\t\x12\x15\n\rforeign_field\x18\x06 \x01(\t\x12\x0f\n\x07\x61s_name\x18\x07 \x01(\t\".\n\rQueryResponse\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\r\n\x05\x65rror\x18\x02 \x01(\t2\xb3\x01\n\x0b\x41uthService\x12\x37\n\x08Register\x12\x16.dbaas.RegisterRequest\x1a\x13.dbaas.AuthResponse\x12\x31\n\x05Login\x12\x13.dbaas.LoginRequest\x1a\x13.dbaas.AuthResponse\x12\x38\n\x0bGetAllUsers\x12\x13.dbaas.EmptyRequest\x1a\x14.dbaas.UsersResponse2\xd2\x05\n\x0f\x44\x61tabaseService\x12;\n\x0e\x43reateDatabase\x12\x16.dbaas.CreateDbRequest\x1a\x11.dbaas.DbResponse\x12:\n\rListDatabases\x12\x12.dbaas.UserRequest\x1a\x15.dbaas.ListDbResponse\x12;\n\x0e\x44\x65leteDatabase\x12\x16.dbaas.DeleteDbRequest\x1a\x11.dbaas.DbResponse\x12=\n\x0c\x41ssignAccess\x12\x1a.dbaas.AssignAccessRequest\x1a\x11.dbaas.DbResponse\x12?\n\x10\x43reateCollection\x12\x18.dbaas.CollectionRequest\x1a\x11.dbaas.DbResponse\x12N\n\x0fListCollections\x12\x1c.dbaas.CollectionListRequest\x1a\x1d.dbaas.CollectionListResponse\x12?\n\x10\x44\x65leteCollection\x12\x18.dbaas.CollectionRequest\x1a\x11.dbaas.DbResponse\x12=\n\x0eInsertDocument\x12\x17.dbaas.InsertDocRequest\x1a\x12.dbaas.DocResponse\x12;\n\rFindDocuments\x12\x15.dbaas.FindDocRequest\x1a\x13.dbaas.DocsResponse\x12=\n\x0eUpdateDocument\x12\x17.dbaas.UpdateDocRequest\x1a\x12.dbaas.DocResponse\x12=\n\x0e\x44\x65leteDocument\x12\x17.dbaas.DeleteDocRequest\x1a\x12.dbaas.DocResponse2\xc1\x02\n\x0cQueryService\x12\x39\n\x0c\x41ggregateSum\x12\x13.dbaas.QueryRequest\x1a\x14.dbaas.QueryResponse\x12=\n\x0f\x46ilterDocuments\x12\x14.dbaas.FilterRequest\x1a\x14.dbaas.QueryResponse\x12\x43\n\x12\x41ggregateDocuments\x12\x17.dbaas.AggregateRequest\x1a\x14.dbaas.QueryResponse\x12;\n\x0e\x44istinctValues\x12\x13.dbaas.QueryRequest\x1a\x14.dbaas.QueryResponse\x12\x35\n\tInnerJoin\x12\x12.dbaas.JoinRequest\x1a\x14.dbaas.QueryResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'dbaas_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_REGISTERREQUEST']._serialized_start=22
-  _globals['_REGISTERREQUEST']._serialized_end=104
-  _globals['_LOGINREQUEST']._serialized_start=106
-  _globals['_LOGINREQUEST']._serialized_end=153
-  _globals['_AUTHRESPONSE']._serialized_start=155
-  _globals['_AUTHRESPONSE']._serialized_end=223
-  _globals['_CREATEDBREQUEST']._serialized_start=225
-  _globals['_CREATEDBREQUEST']._serialized_end=276
-  _globals['_DBRESPONSE']._serialized_start=278
-  _globals['_DBRESPONSE']._serialized_end=322
-  _globals['_QUERYREQUEST']._serialized_start=324
-  _globals['_QUERYREQUEST']._serialized_end=407
-  _globals['_QUERYRESPONSE']._serialized_start=409
-  _globals['_QUERYRESPONSE']._serialized_end=455
-  _globals['_AUTHSERVICE']._serialized_start=457
-  _globals['_AUTHSERVICE']._serialized_end=578
-  _globals['_DATABASESERVICE']._serialized_start=580
-  _globals['_DATABASESERVICE']._serialized_end=658
-  _globals['_QUERYSERVICE']._serialized_start=660
-  _globals['_QUERYSERVICE']._serialized_end=733
+  _globals['_EMPTYREQUEST']._serialized_start=22
+  _globals['_EMPTYREQUEST']._serialized_end=36
+  _globals['_USERREQUEST']._serialized_start=38
+  _globals['_USERREQUEST']._serialized_end=68
+  _globals['_REGISTERREQUEST']._serialized_start=70
+  _globals['_REGISTERREQUEST']._serialized_end=152
+  _globals['_LOGINREQUEST']._serialized_start=154
+  _globals['_LOGINREQUEST']._serialized_end=201
+  _globals['_AUTHRESPONSE']._serialized_start=203
+  _globals['_AUTHRESPONSE']._serialized_end=271
+  _globals['_USERINFO']._serialized_start=273
+  _globals['_USERINFO']._serialized_end=316
+  _globals['_USERSRESPONSE']._serialized_start=318
+  _globals['_USERSRESPONSE']._serialized_end=380
+  _globals['_CREATEDBREQUEST']._serialized_start=382
+  _globals['_CREATEDBREQUEST']._serialized_end=433
+  _globals['_DELETEDBREQUEST']._serialized_start=435
+  _globals['_DELETEDBREQUEST']._serialized_end=486
+  _globals['_ASSIGNACCESSREQUEST']._serialized_start=488
+  _globals['_ASSIGNACCESSREQUEST']._serialized_end=587
+  _globals['_DBRESPONSE']._serialized_start=589
+  _globals['_DBRESPONSE']._serialized_end=633
+  _globals['_LISTDBRESPONSE']._serialized_start=635
+  _globals['_LISTDBRESPONSE']._serialized_end=685
+  _globals['_COLLECTIONREQUEST']._serialized_start=687
+  _globals['_COLLECTIONREQUEST']._serialized_end=765
+  _globals['_COLLECTIONLISTREQUEST']._serialized_start=767
+  _globals['_COLLECTIONLISTREQUEST']._serialized_end=824
+  _globals['_COLLECTIONLISTRESPONSE']._serialized_start=826
+  _globals['_COLLECTIONLISTRESPONSE']._serialized_end=886
+  _globals['_INSERTDOCREQUEST']._serialized_start=888
+  _globals['_INSERTDOCREQUEST']._serialized_end=989
+  _globals['_FINDDOCREQUEST']._serialized_start=991
+  _globals['_FINDDOCREQUEST']._serialized_end=1067
+  _globals['_UPDATEDOCREQUEST']._serialized_start=1069
+  _globals['_UPDATEDOCREQUEST']._serialized_end=1191
+  _globals['_DELETEDOCREQUEST']._serialized_start=1193
+  _globals['_DELETEDOCREQUEST']._serialized_end=1292
+  _globals['_DOCRESPONSE']._serialized_start=1294
+  _globals['_DOCRESPONSE']._serialized_end=1398
+  _globals['_DOCSRESPONSE']._serialized_start=1400
+  _globals['_DOCSRESPONSE']._serialized_end=1448
+  _globals['_QUERYREQUEST']._serialized_start=1450
+  _globals['_QUERYREQUEST']._serialized_end=1533
+  _globals['_FILTERREQUEST']._serialized_start=1535
+  _globals['_FILTERREQUEST']._serialized_end=1632
+  _globals['_AGGREGATEREQUEST']._serialized_start=1634
+  _globals['_AGGREGATEREQUEST']._serialized_end=1735
+  _globals['_JOINREQUEST']._serialized_start=1738
+  _globals['_JOINREQUEST']._serialized_end=1886
+  _globals['_QUERYRESPONSE']._serialized_start=1888
+  _globals['_QUERYRESPONSE']._serialized_end=1934
+  _globals['_AUTHSERVICE']._serialized_start=1937
+  _globals['_AUTHSERVICE']._serialized_end=2116
+  _globals['_DATABASESERVICE']._serialized_start=2119
+  _globals['_DATABASESERVICE']._serialized_end=2841
+  _globals['_QUERYSERVICE']._serialized_start=2844
+  _globals['_QUERYSERVICE']._serialized_end=3165
 # @@protoc_insertion_point(module_scope)

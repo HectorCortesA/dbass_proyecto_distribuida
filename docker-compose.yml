@@ -1,13 +1,4 @@
-<<<<<<< HEAD
-version: "3.8"
-
 services:
-  # ------------------------------------
-  # INFRAESTRUCTURA BASE
-  # ------------------------------------
-=======
-services:
->>>>>>> 926bd7f (fix)
   rabbitmq:
     image: rabbitmq:3-management
     container_name: dbaas_rabbitmq
@@ -25,12 +16,6 @@ services:
     networks:
       - dbaas_network
 
-<<<<<<< HEAD
-  # ------------------------------------
-  # MICROSERVICIOS (Usando guion medio '-')
-  # ------------------------------------
-=======
->>>>>>> 926bd7f (fix)
   mv3-auth:
     build: ./MV3
     container_name: mv3-auth-container
@@ -40,11 +25,6 @@ services:
       - mongo
     networks:
       - dbaas_network
-<<<<<<< HEAD
-    environment:
-      - MONGO_URL=mongodb://mongo:27017
-=======
->>>>>>> 926bd7f (fix)
 
   mv1-database:
     build: ./MV1
@@ -56,29 +36,7 @@ services:
       - rabbitmq
     networks:
       - dbaas_network
-<<<<<<< HEAD
-    environment:
-      - MONGO_URL=mongodb://mongo:27017
-      - RABBITMQ_URL=amqp://rabbitmq:5672/
 
-  mv2-query:
-    build: ./MV2
-    container_name: mv2-query-container
-    ports:
-      - "50053:50053"
-    depends_on:
-      - mongo
-    networks:
-      - dbaas_network
-    environment:
-      - MONGO_URL=mongodb://mongo:27017
-
-  # ------------------------------------
-  # API GATEWAY (Punto de entrada)
-  # ------------------------------------
-=======
-
->>>>>>> 926bd7f (fix)
   gateway:
     build: ./dbaas_proyecto
     container_name: dbaas_gateway
@@ -89,23 +47,11 @@ services:
     depends_on:
       - mv3-auth
       - mv1-database
-<<<<<<< HEAD
-      - mv2-query
-      - rabbitmq
-    networks:
-      - dbaas_network
-    environment:
-      # ACTUALIZADO CON GUIONES MEDIOS PARA QUE gRPC FUNCIONE
-      - AUTH_GRPC_HOST=mv3-auth:50051
-      - DB_GRPC_HOST=mv1-database:50052
-      - QUERY_GRPC_HOST=mv2-query:50053
-=======
     networks:
       - dbaas_network
     environment:
       - AUTH_GRPC_HOST=mv3-auth:50051
       - DB_GRPC_HOST=mv1-database:50052
->>>>>>> 926bd7f (fix)
 
 networks:
   dbaas_network:
