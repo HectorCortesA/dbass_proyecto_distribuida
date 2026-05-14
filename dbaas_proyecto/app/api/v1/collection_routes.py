@@ -1,19 +1,12 @@
-from fastapi import APIRouter, Depends
-from app.middleware.jwt_middleware import get_current_user
-from app.schemas.collection_schema import (
-    CreateCollectionSchema,
-    DeleteCollectionSchema
-)
-from app.services.collection_service import (
-    create_collection,
-    list_collections,
-    delete_collection
-)
+# app/api/v1/collection_routes.py
+from fastapi import APIRouter, HTTPException, Depends  # <--- ASEGÚRATE DE QUE ESTÉ AQUÍ
+from app.schemas.collection_schema import CreateCollectionSchema
+from app.grpc_clients.db_client import DbClient
 
-router = APIRouter(
-    prefix="/collection",
-    tags=["Collections"]
-)
+router = APIRouter(prefix="/collections", tags=["Collections"])
+db_grpc = DbClient()
+
+# ... resto de tus rutas
 
 # Crear colección
 @router.post("/create")

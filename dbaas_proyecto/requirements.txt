@@ -1,6 +1,9 @@
 fastapi
 uvicorn
+pymongo
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
 grpcio
 grpcio-tools
-pydantic
-python-dotenv
+pika

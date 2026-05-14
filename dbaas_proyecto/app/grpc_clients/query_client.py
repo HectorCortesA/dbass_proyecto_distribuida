@@ -1,8 +1,8 @@
 import grpc
 import os
+import grpc
 import app.proto_generated.dbaas_pb2 as pb2
 import app.proto_generated.dbaas_pb2_grpc as pb2_grpc
-
 class QueryClient:
     def __init__(self):
         # Apunta al contenedor MV2

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.auth.schemas import UserRegister, UserLogin
+from app.schemas.auth_schema import UserRegister, UserLogin 
 from app.grpc_clients.auth_client import AuthClient
-
 router = APIRouter()
 auth_grpc = AuthClient()
 

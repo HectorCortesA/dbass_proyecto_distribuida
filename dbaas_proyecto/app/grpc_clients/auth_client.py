@@ -1,8 +1,8 @@
 import grpc
 import os
+import grpc
 import app.proto_generated.dbaas_pb2 as pb2
 import app.proto_generated.dbaas_pb2_grpc as pb2_grpc
-
 class AuthClient:
     def __init__(self):
         # Lee la IP y el puerto de la MV3 desde las variables de entorno. 
