@@ -1,0 +1,31 @@
+services:
+  backend:
+    build: .
+
+    container_name: fastapi_backend
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    depends_on:
+      - mongo
+
+    env_file:
+      - .env
+
+  mongo:
+    image: mongo:latest
+
+    container_name: mongodb
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
