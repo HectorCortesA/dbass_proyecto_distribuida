@@ -162,7 +162,14 @@ class DatabaseServiceServicer(pb2_grpc.DatabaseServiceServicer):
             return pb2.DocResponse(error=str(e))
 
 
+import threading
+from app.rabbitmq.worker import start_worker
+
 def serve():
+    # Arrancar el worker de RabbitMQ en un hilo en segundo plano
+    worker_thread = threading.Thread(target=start_worker, daemon=True)
+    worker_thread.start()
+
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_DatabaseServiceServicer_to_server(DatabaseServiceServicer(), server)
     server.add_insecure_port("[::]:50052")

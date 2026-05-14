@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# Importación de los routers de la API v1
+# Se utiliza 'db_routes' siguiendo tu corrección de nombre de archivo
 from app.api.v1 import (
     auth_routes,
     db_routes,
@@ -8,8 +11,16 @@ from app.api.v1 import (
     query_routes
 )
 
-app = FastAPI(title="DBaaS API Gateway Corregido")
+app = FastAPI(
+    title="DBaaS API Gateway",
+    description="Punto de entrada único para la arquitectura de microservicios distribuida",
+    version="1.0.0"
+)
 
+# =================================================
+# 1. Configuración de CORS
+# =================================================
+# Mantenemos la configuración que tenías en tu monolito original
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,21 +30,53 @@ app.add_middleware(
 )
 
 # =================================================
-# REGISTRO DE RUTAS (Soporte Dual para Auth)
+# 2. Inclusión de Routers (Endpoints del Gateway)
 # =================================================
 
-# 1. Registramos para el frontend viejo (/Authentication)
-app.include_router(auth_routes.router, prefix="/Authentication", tags=["Authentication"])
+# Rutas de Autenticación (Redirige a MV3)
+app.include_router(
+    auth_routes.router, 
+    prefix="/auth", 
+    tags=["Authentication"]
+)
 
-# 2. Registramos para el frontend nuevo (/auth) -> ESTO QUITA EL ERROR 404
-app.include_router(auth_routes.router, prefix="/auth", tags=["Authentication"])
+# Rutas de Base de Datos (Redirige a MV1)
+app.include_router(
+    db_routes.router, 
+    prefix="/db", 
+    tags=["Database"]
+)
 
-# Resto de rutas
-app.include_router(db_routes.router, prefix="/db", tags=["Database"])
-app.include_router(collection_routes.router, prefix="/collection", tags=["Collections"])
-app.include_router(document_routes.router, prefix="/document", tags=["Documents"])
-app.include_router(query_routes.router, prefix="/query", tags=["Queries"])
+# Rutas de Colecciones (Redirige a MV1)
+app.include_router(
+    collection_routes.router, 
+    prefix="/collection", 
+    tags=["Collections"]
+)
 
+# Rutas de Documentos / CRUD (Redirige a MV1)
+app.include_router(
+    document_routes.router, 
+    prefix="/document", 
+    tags=["Documents"]
+)
+
+# Rutas de Consultas y MPI (Redirige a MV2)
+app.include_router(
+    query_routes.router, 
+    prefix="/query", 
+    tags=["Queries"]
+)
+
+# =================================================
+# 3. Endpoint de Verificación (Health Check)
+# =================================================
 @app.get("/")
 def home():
-    return {"message": "API Gateway Operativo con soporte /auth y /Authentication"}
+    """
+    Indica que el Gateway está operativo.
+    """
+    return {
+        "message": "DBaaS API Gateway Running",
+        "status": "Online"
+    }

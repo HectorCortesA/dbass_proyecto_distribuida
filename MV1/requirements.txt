@@ -4,3 +4,4 @@ pymongo
 pika
 python-dotenv
 pydantic
+fastapi

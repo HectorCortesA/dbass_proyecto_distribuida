@@ -17,3 +17,7 @@ class AuthClient:
     def login(self, email, password):
         request = pb2.LoginRequest(email=email, password=password)
         return self.stub.Login(request)
+
+    def get_all_users(self):
+        request = pb2.EmptyRequest()
+        return self.stub.GetAllUsers(request)

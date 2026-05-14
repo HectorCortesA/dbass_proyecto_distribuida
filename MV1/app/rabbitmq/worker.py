@@ -14,14 +14,21 @@ def callback(ch, method, properties, body):
         except Exception as e:
             print(f"Error creando BD: {e}")
 
+import time
+
 def start_worker():
-    connection = pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
-    channel = connection.channel()
-    channel.queue_declare(queue='db_tasks', durable=True)
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='db_tasks', on_message_callback=callback)
-    print('RabbitMQ Worker esperando mensajes...')
-    channel.start_consuming()
+    while True:
+        try:
+            connection = pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
+            channel = connection.channel()
+            channel.queue_declare(queue='db_tasks', durable=True)
+            channel.basic_qos(prefetch_count=1)
+            channel.basic_consume(queue='db_tasks', on_message_callback=callback)
+            print('RabbitMQ Worker conectado y esperando mensajes...')
+            channel.start_consuming()
+        except Exception as e:
+            print(f"Error conectando a RabbitMQ en worker, reintentando en 5s: {e}")
+            time.sleep(5)
 
 if __name__ == '__main__':
     start_worker()

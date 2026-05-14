@@ -7,7 +7,7 @@ db_name = sys.argv[2]
 table_name = sys.argv[3]
 field = sys.argv[4]
 
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://dbaas_mongo:27017")
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongodb_core:27017")
 client = MongoClient(MONGO_URL)
 
 comm = MPI.COMM_WORLD
@@ -16,7 +16,7 @@ size = comm.Get_size()
 chunks = None
 
 if rank == 0:
-    database_name = f"{user_id}_{db_name}"
+    database_name = db_name if db_name.startswith(f"{user_id}_") else f"{user_id}_{db_name}"
     db = client[database_name]
     collection = db[table_name]
     

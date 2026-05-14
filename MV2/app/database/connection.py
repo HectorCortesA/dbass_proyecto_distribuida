@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-from MV2.app.mpi_worker import (
+from app.config import (
     MONGO_URL,
     DATABASE_NAME
 )

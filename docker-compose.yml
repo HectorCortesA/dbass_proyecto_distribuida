@@ -37,6 +37,16 @@ services:
     networks:
       - dbaas_network
 
+  mv2-query:
+    build: ./MV2
+    container_name: mv2-query-container
+    ports:
+      - "50053:50053"
+    depends_on:
+      - mongo
+    networks:
+      - dbaas_network
+
   gateway:
     build: ./dbaas_proyecto
     container_name: dbaas_gateway
@@ -47,11 +57,13 @@ services:
     depends_on:
       - mv3-auth
       - mv1-database
+      - mv2-query
     networks:
       - dbaas_network
     environment:
       - AUTH_GRPC_HOST=mv3-auth-container:50051
       - DB_GRPC_HOST=mv1-database-container:50052
+      - QUERY_GRPC_HOST=mv2-query-container:50053
 
 networks:
   dbaas_network:

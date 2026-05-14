@@ -1,9 +1,19 @@
 # app/services/query_service.py
 
-from app.database.connection import client
+from app.database.connection import client, permissions_collection
 from bson import ObjectId
 from mpi4py import MPI
 import math
+
+def get_real_db_name(db_name: str, user_id: str) -> str:
+    if db_name.startswith(f"{user_id}_"):
+        return db_name
+        
+    prefixed_name = f"{user_id}_{db_name}"
+    if permissions_collection.find_one({"db_name": prefixed_name}):
+        return prefixed_name
+        
+    return db_name
 
 def get_mpi_info():
     """Obtiene el comunicador, el rango (ID del proceso) y el tamaño (total de procesos)"""
@@ -17,7 +27,7 @@ def count_documents(user_id: str, db_name: str, table_name: str, filters: dict =
     chunks = None
 
     if rank == 0:
-        database_name = f"{user_id}_{db_name}"
+        database_name = get_real_db_name(db_name, user_id)
         db = client[database_name]
         collection = db[table_name]
         
@@ -50,7 +60,7 @@ def aggregate_sum(user_id: str, db_name: str, table_name: str, field: str):
     chunks = None
 
     if rank == 0:
-        database_name = f"{user_id}_{db_name}"
+        database_name = get_real_db_name(db_name, user_id)
         db = client[database_name]
         collection = db[table_name]
         
@@ -83,7 +93,7 @@ def aggregate_avg(user_id: str, db_name: str, table_name: str, field: str):
     chunks = None
 
     if rank == 0:
-        database_name = f"{user_id}_{db_name}"
+        database_name = get_real_db_name(db_name, user_id)
         db = client[database_name]
         collection = db[table_name]
         
@@ -115,7 +125,7 @@ def aggregate_avg(user_id: str, db_name: str, table_name: str, field: str):
     return None
 
 def sort_documents(user_id: str, db_name: str, table_name: str, field: str, order: int = 1):
-    database_name = f"{user_id}_{db_name}"
+    database_name = get_real_db_name(db_name, user_id)
     db = client[database_name]
     collection = db[table_name]
     documents = list(collection.find().sort(field, order))
@@ -124,7 +134,7 @@ def sort_documents(user_id: str, db_name: str, table_name: str, field: str, orde
     return {"data": documents}
 
 def limit_documents(user_id: str, db_name: str, table_name: str, limit: int):
-    database_name = f"{user_id}_{db_name}"
+    database_name = get_real_db_name(db_name, user_id)
     db = client[database_name]
     collection = db[table_name]
     documents = list(collection.find().limit(limit))
@@ -135,14 +145,14 @@ def limit_documents(user_id: str, db_name: str, table_name: str, limit: int):
 # --- Funciones restauradas ---
 
 def aggregate_distinct(user_id: str, db_name: str, table_name: str, field: str):
-    database_name = f"{user_id}_{db_name}"
+    database_name = get_real_db_name(db_name, user_id)
     db = client[database_name]
     collection = db[table_name]
     result = collection.distinct(field)
     return {"data": result}
 
 def aggregate_inner_join(user_id: str, db_name: str, table_name: str, from_table: str, local_field: str, foreign_field: str, as_name: str):
-    database_name = f"{user_id}_{db_name}"
+    database_name = get_real_db_name(db_name, user_id)
     db = client[database_name]
     collection = db[table_name]
 
@@ -171,7 +181,7 @@ def aggregate_inner_join(user_id: str, db_name: str, table_name: str, from_table
     return {"data": documents}
 
 def filter_documents(db_name: str, collection_name: str, filters: dict, owner_id: str):
-    database_name = f"{owner_id}_{db_name}"
+    database_name = get_real_db_name(db_name, owner_id)
     db = client[database_name]
     
     if "_id" in filters and isinstance(filters["_id"], str):
@@ -183,7 +193,7 @@ def filter_documents(db_name: str, collection_name: str, filters: dict, owner_id
     return {"data": documents}
 
 def aggregate_documents(db_name: str, collection_name: str, pipeline: list, owner_id: str):
-    database_name = f"{owner_id}_{db_name}"
+    database_name = get_real_db_name(db_name, owner_id)
     db = client[database_name]
     documents = list(db[collection_name].aggregate(pipeline))
     for doc in documents:

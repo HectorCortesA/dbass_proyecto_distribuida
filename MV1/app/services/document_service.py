@@ -4,6 +4,16 @@ from app.database.connection import client, permissions_collection
 from bson import ObjectId
 from fastapi import HTTPException
 
+def get_real_db_name(db_name: str, user_id: str) -> str:
+    if db_name.startswith(f"{user_id}_"):
+        return db_name
+        
+    prefixed_name = f"{user_id}_{db_name}"
+    if permissions_collection.find_one({"db_name": prefixed_name}):
+        return prefixed_name
+        
+    return db_name
+
 # NUEVA FUNCIÓN: Verifica si el usuario tiene permiso (ya sea como admin o invitado)
 def check_db_permission(db_name: str, user_id: str, required_role: str):
     perm = permissions_collection.find_one({"db_name": db_name, "user_id": user_id})
@@ -18,11 +28,11 @@ def check_db_permission(db_name: str, user_id: str, required_role: str):
     return True
 
 def insert_document(db_name: str, collection_name: str, document: dict, owner_id: str):
+    real_db_name = get_real_db_name(db_name, owner_id)
     # Validamos permisos de escritura
-    check_db_permission(db_name, owner_id, "escritura")
+    check_db_permission(real_db_name, owner_id, "escritura")
     
-    # CAMBIO CRÍTICO: Usamos db_name directamente
-    db = client[db_name]
+    db = client[real_db_name]
     result = db[collection_name].insert_one(document)
     
     return {
@@ -31,11 +41,11 @@ def insert_document(db_name: str, collection_name: str, document: dict, owner_id
     }
 
 def find_documents(db_name: str, collection_name: str, owner_id: str):
+    real_db_name = get_real_db_name(db_name, owner_id)
     # Validamos permisos de lectura (ambos roles pueden leer)
-    check_db_permission(db_name, owner_id, "lectura")
+    check_db_permission(real_db_name, owner_id, "lectura")
     
-    # CAMBIO CRÍTICO: Usamos db_name directamente
-    db = client[db_name]
+    db = client[real_db_name]
     documents = list(db[collection_name].find({}))
     for doc in documents:
         doc["_id"] = str(doc["_id"])
@@ -43,11 +53,11 @@ def find_documents(db_name: str, collection_name: str, owner_id: str):
     return {"data": documents}
 
 def update_document(db_name: str, collection_name: str, filter_query: dict, new_data: dict, owner_id: str):
+    real_db_name = get_real_db_name(db_name, owner_id)
     # Validamos permisos de escritura
-    check_db_permission(db_name, owner_id, "escritura")
+    check_db_permission(real_db_name, owner_id, "escritura")
     
-    # CAMBIO CRÍTICO: Usamos db_name directamente
-    db = client[db_name]
+    db = client[real_db_name]
     
     if "_id" in filter_query and isinstance(filter_query["_id"], str):
         filter_query["_id"] = ObjectId(filter_query["_id"])
@@ -60,11 +70,11 @@ def update_document(db_name: str, collection_name: str, filter_query: dict, new_
     }
 
 def delete_document(db_name: str, collection_name: str, filter_query: dict, owner_id: str):
+    real_db_name = get_real_db_name(db_name, owner_id)
     # Validamos permisos de escritura
-    check_db_permission(db_name, owner_id, "escritura")
+    check_db_permission(real_db_name, owner_id, "escritura")
     
-    # CAMBIO CRÍTICO: Usamos db_name directamente
-    db = client[db_name]
+    db = client[real_db_name]
     
     if "_id" in filter_query and isinstance(filter_query["_id"], str):
         filter_query["_id"] = ObjectId(filter_query["_id"])
