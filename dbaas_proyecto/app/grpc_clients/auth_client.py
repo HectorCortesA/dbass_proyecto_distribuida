@@ -25,7 +25,7 @@ class AuthClient:
             username=username, email=email, password=password, role=role
         )
         return self.stub.Register(request)
-
+# --------------------------------------------------
     def login(self, email, password):
         request = pb2.LoginRequest(email=email, password=password)
         return self.stub.Login(request)
