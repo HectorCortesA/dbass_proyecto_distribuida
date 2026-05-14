@@ -5,7 +5,11 @@ from concurrent import futures
 import app.proto_generated.dbaas_pb2 as pb2
 import app.proto_generated.dbaas_pb2_grpc as pb2_grpc
 
-from app.rabbitmq.producer import publish_db_creation_task
+from app.rabbitmq.producer import (
+    publish_db_creation_task,
+    publish_table_creation_task,
+    publish_insert_task,
+)
 from app.services.database_service import (
     list_databases,
     delete_database,
@@ -67,15 +71,14 @@ class DatabaseServiceServicer(pb2_grpc.DatabaseServiceServicer):
     # --------------------------------------------------
 
     def CreateCollection(self, request, context):
-        try:
-            result = create_collection(
-                db_name=request.db_name,
-                collection_name=request.collection_name,
-                owner_id=request.user_id,
-            )
-            return pb2.DbResponse(message=result["message"])
-        except Exception as e:
-            return pb2.DbResponse(error=str(e))
+        success = publish_table_creation_task(
+            user_id=request.user_id,
+            db_name=request.db_name,
+            collection_name=request.collection_name,
+        )
+        if success:
+            return pb2.DbResponse(message="Creación de colección encolada exitosamente")
+        return pb2.DbResponse(error="Fallo al encolar la creación de colección en RabbitMQ")
 
     def ListCollections(self, request, context):
         try:
@@ -105,14 +108,15 @@ class DatabaseServiceServicer(pb2_grpc.DatabaseServiceServicer):
     def InsertDocument(self, request, context):
         try:
             document = json.loads(request.document_json)
-        # Asegúrate de que el parámetro sea owner_id como en document_service.py
-            result = insert_document(
+            success = publish_insert_task(
                 db_name=request.db_name,
                 collection_name=request.collection_name,
                 document=document,
-                owner_id=request.owner_id, 
+                owner_id=request.owner_id,
             )
-            return pb2.DocResponse(message=result["message"], id=result.get("id", ""))
+            if success:
+                return pb2.DocResponse(message="Inserción de documento encolada exitosamente", id="async-enqueued")
+            return pb2.DocResponse(error="Fallo al encolar la inserción en RabbitMQ")
         except Exception as e:
             return pb2.DocResponse(error=str(e))
 

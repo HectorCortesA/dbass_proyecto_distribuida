@@ -20,6 +20,22 @@ class QueryClient:
             )
         )
 
+    def get_count(self, user_id, db_name, table_name):
+        return self.stub.AggregateSum(
+            pb2.QueryRequest(
+                user_id=user_id, db_name=db_name,
+                table_name=table_name, field="COUNT",
+            )
+        )
+
+    def get_avg(self, user_id, db_name, table_name, field):
+        return self.stub.AggregateSum(
+            pb2.QueryRequest(
+                user_id=user_id, db_name=db_name,
+                table_name=table_name, field=f"AVG:{field}",
+            )
+        )
+
     def filter_documents(self, db_name, collection_name, filters, owner_id):
         return self.stub.FilterDocuments(
             pb2.FilterRequest(
