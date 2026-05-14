@@ -1,7 +1,8 @@
-grpcio
-grpcio-tools
-pymongo
-passlib[bcrypt]
-python-jose[cryptography]
-python-dotenv
-pydantic
+grpcio==1.62.1
+grpcio-tools==1.62.1
+pymongo==4.6.2
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-jose[cryptography]==3.3.0
+python-dotenv==1.0.1
+pydantic[email]==2.6.3
