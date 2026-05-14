@@ -7,6 +7,7 @@ router = APIRouter(prefix="/collections", tags=["Collections"])
 db_grpc = DbClient()
 
 # ... resto de tus rutas
+#
 
 # Crear colección
 @router.post("/create")
